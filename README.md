@@ -2,6 +2,8 @@
 
 For more information regarding this project, please visit [the following repository](https://github.com/jdavidyoung07/csi4900-ML) containing the ML source code.
 
+Access the webapp here: https://jdavidyoung07.github.io .
+
 # **Team Members:**
 * Issam Robler - irobl078@uottawa.ca
 * Jean-David Young - jyoun111@uottawa.ca
