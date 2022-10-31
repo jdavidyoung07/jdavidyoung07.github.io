@@ -5,7 +5,7 @@ For more information regarding this project, please visit [the following reposit
 Access the webapp here: https://jdavidyoung07.github.io .
 
 # **Team Members:**
-* Issam Robler - irobl078@uottawa.ca
+* Issam Robler - irobl078@uottawa.ca (test)
 * Jean-David Young - jyoun111@uottawa.ca
 
 **Supervisor:**
