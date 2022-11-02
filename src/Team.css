@@ -8,6 +8,11 @@
 
 .Teams-info {
     display: flex;
+    flex-direction: column;
+}
+
+.Teams-inputs {
+    display: flex;
     flex-direction: row;
 }
 
