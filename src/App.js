@@ -199,6 +199,7 @@ const App = () => {
 
     var winning_team = 'Team';
 
+    console.log(prediction.prediction);
     if (prediction.prediction == 0) {
       winning_team = "Team 1";
     } else {
