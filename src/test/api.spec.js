@@ -65,7 +65,7 @@ const TEST_DATA_TEAM_COMP = {
 
 describe("TEST API", function () {
   it("BASE URL TEST", () => {
-    const base_url = process.env.ML_API_BASE_URL;
+    const base_url = process.env.REACT_APP_ML_BASE_URL;
     console.log(base_url);
     expect(base_url).to.not.be.null;
   });

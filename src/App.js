@@ -28,7 +28,7 @@ const App = () => {
   const[total_gold_spent_1, setTeam1GoldSpent] = useState('');
   const[total_baron_kills_1, setTeam1BaronKills] = useState('');
   const[total_dragon_kills_1, setTeam1DragonKills] = useState('');
-  const[total_inhibitor_kils_1, setTeam1InhibitorKills] = useState('');
+  const[total_inhibitor_kills_1, setTeam1InhibitorKills] = useState('');
   const[total_kills_1, setTeam1Kills] = useState('');
   const[total_deaths_1, setTeam1Deaths] = useState('');
   const[total_damage_dealt_to_champions_1, setTeam1DmgToChampions] = useState('');
@@ -113,7 +113,7 @@ const App = () => {
       case "total_dragon_kills_1":
         setTeam1DragonKills(data.target.value);
         break;
-      case "tot1al_inhibitor_kills_1":
+      case "total_inhibitor_kills_1":
         setTeam1InhibitorKills(data.target.value);
         break;
       case "total_kills_1":
@@ -147,49 +147,68 @@ const App = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  async function makeAPICall(prediction_data) {
+    const response = await predict_from_team_preformance(prediction_data);
+    const prediction = response.data;
+    return prediction;
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
     
     const prediction_data = {
-      total_gold_earned_0: {total_gold_earned_0},
-      total_gold_spent_0: {total_gold_spent_0},
-      total_baron_kills_0: {total_baron_kills_0},
-      total_dragon_kills_0: {total_dragon_kills_0},
-      total_inhibitor_kils_0: {total_inhibitor_kills_0},
-      total_kills_0: {total_kills_0},
-      total_deaths_0: {total_deaths_0},
-      total_damage_dealt_to_champions_0: {total_damage_dealt_to_champions_0},
-      total_damage_dealt_to_objectives_0: {total_damage_dealt_to_objectives_0},
-      total_damage_taken_0: {total_damage_taken_0},
-      average_vision_score_0: {average_vision_score_0},
-      total_wards_placed_0: {total_wards_placed_0},
-      average_creep_score_0: {average_creep_score_0},
-      average_champion_experience_0: {average_champion_experience_0},
-      total_gold_earned_1: {total_gold_earned_1},
-      total_gold_spent_1: {total_gold_spent_1},
-      total_baron_kills_1: {total_baron_kills_1},
-      total_dragon_kills_1: {total_dragon_kills_1},
-      total_inhibitor_kils_1: {total_inhibitor_kils_1},
-      total_kills_1: {total_kills_1},
-      total_deaths_1: {total_deaths_1},
-      total_damage_dealt_to_champions_1: {total_damage_dealt_to_champions_1},
-      total_damage_dealt_to_objectives_1: {total_damage_dealt_to_objectives_1},
-      total_damage_taken_1: {total_damage_taken_1},
-      average_vision_score_1: {average_vision_score_1},
-      total_wards_placed_1: {total_wards_placed_1},
-      average_creep_score_1: {average_creep_score_1},
-      average_champion_experience_1: {average_champion_experience_1},
-      gameLengthMin: {game_length},
-      dmg_to_champs_winner: {champion_dmg_winner},
-      dmg_to_obj_winner: {objective_damage_winner},
-      vision_winner: {vision_winner},
-      cs_winner: {creep_score_winner},
-      champ_experience_winner: {champ_exp_winner},
-      wards_placed_winner: {wards_placed_winner},
-      gold_spender_winner: {gold_spent_winner}
+      total_gold_earned_0: [parseInt(total_gold_earned_0)],
+      total_gold_spent_0: [parseInt(total_gold_spent_0)],
+      total_baron_kills_0: [parseInt(total_baron_kills_0)],
+      total_dragon_kills_0: [parseInt(total_dragon_kills_0)],
+      total_inhibitor_kills_0: [parseInt(total_inhibitor_kills_0)],
+      total_kills_0: [parseInt(total_kills_0)],
+      total_deaths_0: [parseInt(total_deaths_0)],
+      total_damage_dealt_to_champions_0: [parseInt(total_damage_dealt_to_champions_0)],
+      total_damage_dealt_to_objectives_0: [parseInt(total_damage_dealt_to_objectives_0)],
+      total_damage_taken_0: [parseInt(total_damage_taken_0)],
+      average_vision_score_0: [parseInt(average_vision_score_0)],
+      total_wards_placed_0: [parseInt(total_wards_placed_0)],
+      average_creep_score_0: [parseInt(average_creep_score_0)],
+      average_champion_experience_0: [parseInt(average_champion_experience_0)],
+      total_gold_earned_1: [parseInt(total_gold_earned_1)],
+      total_gold_spent_1: [parseInt(total_gold_spent_1)],
+      total_baron_kills_1: [parseInt(total_baron_kills_1)],
+      total_dragon_kills_1: [parseInt(total_dragon_kills_1)],
+      total_inhibitor_kills_1: [parseInt(total_inhibitor_kills_1)],
+      total_kills_1: [parseInt(total_kills_1)],
+      total_deaths_1: [parseInt(total_deaths_1)],
+      total_damage_dealt_to_champions_1: [parseInt(total_damage_dealt_to_champions_1)],
+      total_damage_dealt_to_objectives_1: [parseInt(total_damage_dealt_to_objectives_1)],
+      total_damage_taken_1: [parseInt(total_damage_taken_1)],
+      average_vision_score_1: [parseInt(average_vision_score_1)],
+      total_wards_placed_1: [parseInt(total_wards_placed_1)],
+      average_creep_score_1: [parseInt(average_creep_score_1)],
+      average_champion_experience_1: [parseInt(average_champion_experience_1)],
+      gameLengthMin: [parseInt(game_length)],
+      dmg_to_champs_winner: [parseInt(champion_dmg_winner)],
+      dmg_to_obj_winner: [parseInt(objective_damage_winner)],
+      vision_winner: [parseInt(vision_winner)],
+      cs_winner: [parseInt(creep_score_winner)],
+      champ_experience_winner: [parseInt(champ_exp_winner)],
+      wards_placed_winner: [parseInt(wards_placed_winner)],
+      gold_spender_winner: [parseInt(gold_spent_winner)],
     }
 
-    console.log(prediction_data)
+    const prediction = await makeAPICall(prediction_data);
+
+    var winning_team = 'Team';
+
+    if (prediction.prediction == 0) {
+      winning_team = "Team 1";
+    } else {
+      winning_team = "Team 2";
+    }
+    
+    console.log(winning_team);
+    const result_text = "<div>" + winning_team  + " wins</div>";
+
+    document.getElementById("prediction-result").innerHTML = result_text;
   }
 
   return (
@@ -250,8 +269,8 @@ const App = () => {
                         onChange={(e) => setChampionDmgWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
 
@@ -263,8 +282,8 @@ const App = () => {
                         onChange={(e) => setObjectiveDamageWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
 
@@ -276,8 +295,8 @@ const App = () => {
                         onChange={(e) => setVisionWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
 
@@ -289,8 +308,8 @@ const App = () => {
                         onChange={(e) => setCreepScoreWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
 
@@ -302,8 +321,8 @@ const App = () => {
                         onChange={(e) => setWardsPlacedWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
 
@@ -315,8 +334,8 @@ const App = () => {
                         onChange={(e) => setChampExpWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
 
@@ -328,13 +347,14 @@ const App = () => {
                         onChange={(e) => setGoldSpentWinner(e.target.value)}
                         >
                     <option value="n/a">N/A</option>
-                    <option value="team1">Team 1</option>
-                    <option value="team2">Team 2</option>
+                    <option value="0">Team 1</option>
+                    <option value="1">Team 2</option>
                   </select>
                 </div>
               </div>
             </div>
           </p>
+          <div id="prediction-result" className="Prediction-result"> {/* Prediction */} </div>
           <button className="Predict-button">Predict</button>
         </p>
       </div>

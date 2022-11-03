@@ -117,6 +117,12 @@ html {
   background-color: rgb(255, 232, 155);
 }
 
+.Prediction-result {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
 div {
   margin:auto;
 }
