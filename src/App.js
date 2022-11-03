@@ -49,6 +49,8 @@ const App = () => {
   const[champ_exp_winner, setChampExpWinner] = useState('');
   const[gold_spent_winner, setGoldSpentWinner] = useState('');
 
+  var teamData = {};
+
   const getTeamData = (data) => {
     console.log(data.target.id);
     console.log(data.target.value);
@@ -149,6 +151,7 @@ const App = () => {
 
   async function makeAPICall(prediction_data) {
     const response = await predict_from_team_preformance(prediction_data);
+    console.log(response);
     const prediction = response.data;
     return prediction;
   }
@@ -161,7 +164,7 @@ const App = () => {
       total_gold_spent_0: [parseInt(total_gold_spent_0)],
       total_baron_kills_0: [parseInt(total_baron_kills_0)],
       total_dragon_kills_0: [parseInt(total_dragon_kills_0)],
-      total_inhibitor_kills_0: [parseInt(total_inhibitor_kills_0)],
+      total_inhibitor_kils_0: [parseInt(total_inhibitor_kills_0)],
       total_kills_0: [parseInt(total_kills_0)],
       total_deaths_0: [parseInt(total_deaths_0)],
       total_damage_dealt_to_champions_0: [parseInt(total_damage_dealt_to_champions_0)],
@@ -175,7 +178,7 @@ const App = () => {
       total_gold_spent_1: [parseInt(total_gold_spent_1)],
       total_baron_kills_1: [parseInt(total_baron_kills_1)],
       total_dragon_kills_1: [parseInt(total_dragon_kills_1)],
-      total_inhibitor_kills_1: [parseInt(total_inhibitor_kills_1)],
+      total_inhibitor_kils_1: [parseInt(total_inhibitor_kills_1)],
       total_kills_1: [parseInt(total_kills_1)],
       total_deaths_1: [parseInt(total_deaths_1)],
       total_damage_dealt_to_champions_1: [parseInt(total_damage_dealt_to_champions_1)],
@@ -200,20 +203,23 @@ const App = () => {
     var winning_team = 'Team';
 
     console.log(prediction.prediction);
+
     if (prediction.prediction == 0) {
       winning_team = "Team 1";
     } else {
       winning_team = "Team 2";
     }
+
+    loadJSON();
     
-    console.log(winning_team);
     const result_text = "<div>" + winning_team  + " wins</div>";
 
     document.getElementById("prediction-result").innerHTML = result_text;
+
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} id="prediction-form">
       <div className="App">
       <div className='App-title'>
         Summoner's Tool:&nbsp;A League of Legends Predictive Machine Learning Model
@@ -356,7 +362,7 @@ const App = () => {
             </div>
           </p>
           <div id="prediction-result" className="Prediction-result"> {/* Prediction */} </div>
-          <button className="Predict-button">Predict</button>
+          <input type="submit" className="Predict-button" value="Predict"/>
         </p>
       </div>
 

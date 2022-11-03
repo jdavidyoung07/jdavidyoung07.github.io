@@ -103,7 +103,7 @@ const Team = ({team, handleChange}) => {
               />
               
               <Team_Input 
-              input="Total Damage Dealth to Objectives"
+              input="Total Damage Dealt to Objectives"
               value={total_damage_dealt_to_objectives_0}
               id="total_damage_dealt_to_objectives_0"
               handleChange={handleChange}
@@ -143,7 +143,7 @@ const Team = ({team, handleChange}) => {
               id="average_champion_experience_0"
               handleChange={handleChange}
               />
-          
+
           </div>
   
         </div>
@@ -216,7 +216,7 @@ const Team = ({team, handleChange}) => {
               />
               
               <Team_Input 
-              input="Total Damage Dealth to Objectives"
+              input="Total Damage Dealt to Objectives"
               value={total_damage_dealt_to_objectives_1}
               id="total_damage_dealt_to_objectives_1"
               handleChange={handleChange}
@@ -256,7 +256,7 @@ const Team = ({team, handleChange}) => {
               id="average_champion_experience_1"
               handleChange={handleChange}
               />
-          
+
           </div>
   
         </div>
