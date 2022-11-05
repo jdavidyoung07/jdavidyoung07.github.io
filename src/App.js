@@ -149,6 +149,86 @@ const App = () => {
     }
   }
 
+  // Import feature
+  const[file, setFile] = useState('');
+  const[fileName, setFileName] = useState('');
+
+  const fileReader = new FileReader();
+
+  const loadJSON = (e) => {
+    setFile(e.target.files[0]);
+    setFileName(e.target.files[0].name);
+  }
+
+
+  async function submitJSON(e) {
+    e.preventDefault();
+
+    if (file) {
+      fileReader.onload = async function (event) {
+        const text = event.target.result;
+        var json_string = JSON.stringify(text);
+        var json_format = JSON.parse(JSON.parse(json_string));
+        
+        const data = {
+          total_gold_earned_0: [json_format["per_team"]["100"]["total_gold_earned"]],
+          total_gold_spent_0: [json_format["per_team"]["100"]["total_gold_spent"]],
+          total_baron_kills_0: [json_format["per_team"]["100"]["total_baron_kills"]],
+          total_dragon_kills_0: [json_format["per_team"]["100"]["total_dragon_kills"]],
+          total_inhibitor_kils_0: [json_format["per_team"]["100"]["total_inhibitor_kils"]],
+          total_kills_0: [json_format["per_team"]["100"]["total_kills"]],
+          total_deaths_0: [json_format["per_team"]["100"]["total_deaths"]],
+          total_damage_dealt_to_champions_0: [json_format["per_team"]["100"]["total_damage_dealt_to_champions"]],
+          total_damage_dealt_to_objectives_0: [json_format["per_team"]["100"]["total_damage_dealt_to_objectives"]],
+          total_damage_taken_0: [json_format["per_team"]["100"]["total_damage_taken"]],
+          average_vision_score_0: [json_format["per_team"]["100"]["average_vision_score"]],
+          total_wards_placed_0: [json_format["per_team"]["100"]["total_wards_placed"]],
+          average_creep_score_0: [json_format["per_team"]["100"]["average_creep_score"]],
+          average_champion_experience_0: [json_format["per_team"]["100"]["average_champion_experience"]],
+          total_gold_earned_1: [json_format["per_team"]["200"]["total_gold_earned"]],
+          total_gold_spent_1: [json_format["per_team"]["200"]["total_gold_spent"]],
+          total_baron_kills_1: [json_format["per_team"]["200"]["total_baron_kills"]],
+          total_dragon_kills_1: [json_format["per_team"]["200"]["total_dragon_kills"]],
+          total_inhibitor_kils_1: [json_format["per_team"]["200"]["total_inhibitor_kils"]],
+          total_kills_1: [json_format["per_team"]["200"]["total_kills"]],
+          total_deaths_1: [json_format["per_team"]["200"]["total_deaths"]],
+          total_damage_dealt_to_champions_1: [json_format["per_team"]["200"]["total_damage_dealt_to_champions"]],
+          total_damage_dealt_to_objectives_1: [json_format["per_team"]["200"]["total_damage_dealt_to_objectives"]],
+          total_damage_taken_1: [json_format["per_team"]["200"]["total_damage_taken"]],
+          average_vision_score_1: [json_format["per_team"]["200"]["average_vision_score"]],
+          total_wards_placed_1: [json_format["per_team"]["200"]["total_wards_placed"]],
+          average_creep_score_1: [json_format["per_team"]["200"]["average_creep_score"]],
+          average_champion_experience_1: [json_format["per_team"]["200"]["average_champion_experience"]],
+          gameLengthMin: [json_format["general"]["gameLengthMin"]],
+          dmg_to_champs_winner: [json_format["general"]["dmg_to_champs_winner"]],
+          dmg_to_obj_winner: [json_format["general"]["dmg_to_obj_winner"]],
+          vision_winner: [json_format["general"]["vision_winner"]],
+          cs_winner: [json_format["general"]["cs_winner"]],
+          champ_experience_winner: [json_format["general"]["champ_experience_winner"]],
+          wards_placed_winner: [json_format["general"]["wards_placed_winner"]],
+          gold_spender_winner: [json_format["general"]["gold_spender_winner"]],
+        }
+
+        const prediction = await makeAPICall(data);
+        console.log(prediction);
+
+        var winning_team = "Team";
+
+        if (prediction.prediction == 0) {
+          winning_team = "Team 1";
+        } else {
+          winning_team = "Team 2";
+        }
+        
+        const result_text = "<label>" + winning_team  + " wins</label>";
+    
+        document.getElementById("JSON-prediction-result").innerHTML = result_text;
+      }
+
+      fileReader.readAsText(file);
+    }
+  };
+
   async function makeAPICall(prediction_data) {
     const response = await predict_from_team_preformance(prediction_data);
     console.log(response);
@@ -209,8 +289,6 @@ const App = () => {
     } else {
       winning_team = "Team 2";
     }
-
-    loadJSON();
     
     const result_text = "<div>" + winning_team  + " wins</div>";
 
@@ -221,151 +299,169 @@ const App = () => {
   return (
     <form onSubmit={handleSubmit} id="prediction-form">
       <div className="App">
-      <div className='App-title'>
-        Summoner's Tool:&nbsp;A League of Legends Predictive Machine Learning Model
-      </div>
+        <div className='App-title'>
+          Summoner's Tool:&nbsp;A League of Legends Predictive Machine Learning Model
+        </div>
       
-      <div className="App-text">
-        <p className="App-welcome">
-          Welcome back, Jedi07.
-        </p>
-
-        <p className="App-para">
-          You already have a model trained and loaded. Please enter game characteristics below to predict the likely outcome:
-          
-          <p className="Teams">
-            <Team team="Team 1" className="Teams" id="team_1" handleChange={getTeamData}></Team>
-            <Team team="Team 2" className="Teams" id="team_2" handleChange={getTeamData}></Team>
+        <div className="App-text">
+          <p className="App-welcome">
+            Welcome back, Jedi07.
           </p>
 
-          <p className="General-game-info">
-            <div className="General-game-info-title">
-              General Game Information
-            </div>
+          <p className="App-para">
+            You already have a model trained and loaded. Please enter game characteristics below to predict the likely outcome:
+            
+            <p className="Teams">
+              <Team team="Team 1" className="Teams" id="team_1" handleChange={getTeamData}></Team>
+              <Team team="Team 2" className="Teams" id="team_2" handleChange={getTeamData}></Team>
+            </p>
 
-            <div className='Teams'>
+            <div className="Teams">
+              <div className="Team">
+                <div className="General-game-info-title">
+                  General Game Information
+                </div>
 
-              <div className='General-game-info-left'>
-                <div className="General-game-info-chars">Game Length (minutes)</div>
-                <div className="General-game-info-chars">Total Damage Dealt to Champions Winner</div>
-                <div className="General-game-info-chars">Total Damage Dealt to Objectives Winner</div>
-                <div className="General-game-info-chars">Total Vision Winner</div>
-                <div className="General-game-info-chars">Total Creep Score Winner</div>
-                <div className="General-game-info-chars">Total Wards Placed Winner</div>
-                <div className="General-game-info-chars">Total Champion Experience Winner</div>
-                <div className="General-game-info-chars">Total Gold Spent Winner</div>
-              </div>
+                <div className='Teams'>
 
-              <div className='General-game-info-left'>
-                <div><input 
-                        type="number" 
-                        className="char-input" 
-                        id="game_length" 
-                        placeholder='0'
-                        value={game_length}
-                        onChange={(e) => setGameLength(e.target.value)}
-                        >
-                      </input>
+                  <div className='General-game-info-left'>
+                    <div className="General-game-info-chars">Game Length (minutes)</div>
+                    <div className="General-game-info-chars">Total Damage Dealt to Champions Winner</div>
+                    <div className="General-game-info-chars">Total Damage Dealt to Objectives Winner</div>
+                    <div className="General-game-info-chars">Total Vision Winner</div>
+                    <div className="General-game-info-chars">Total Creep Score Winner</div>
+                    <div className="General-game-info-chars">Total Wards Placed Winner</div>
+                    <div className="General-game-info-chars">Total Champion Experience Winner</div>
+                    <div className="General-game-info-chars">Total Gold Spent Winner</div>
+                  </div>
+
+                  <div className='General-game-info-right'>
+                    <div className="General-game-info-inputs"><input 
+                            type="number" 
+                            className="char-input" 
+                            id="game_length" 
+                            placeholder='0'
+                            value={game_length}
+                            onChange={(e) => setGameLength(e.target.value)}
+                            >
+                          </input>
+                        </div>
+                    
+                    <div className="General-game-info-inputs"><select 
+                            id="champion_dmg_winner"
+                            name="champion-dmg-winner" 
+                            className='char-input' 
+                            value={champion_dmg_winner} 
+                            onChange={(e) => setChampionDmgWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
                     </div>
-                
-                <div><select 
-                        id="champion_dmg_winner"
-                        name="champion-dmg-winner" 
-                        className='char-input' 
-                        value={champion_dmg_winner} 
-                        onChange={(e) => setChampionDmgWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
-                </div>
 
-                <div><select 
-                        id="objective_damage_winner" 
-                        name="objective-dmg-winner" 
-                        className='char-input'
-                        value={objective_damage_winner}
-                        onChange={(e) => setObjectiveDamageWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
-                </div>
+                    <div className="General-game-info-inputs"><select 
+                            id="objective_damage_winner" 
+                            name="objective-dmg-winner" 
+                            className='char-input'
+                            value={objective_damage_winner}
+                            onChange={(e) => setObjectiveDamageWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
+                    </div>
 
-                <div><select 
-                        id="vision_winner" 
-                        name="vision-winner" 
-                        className='char-input'
-                        value={vision_winner}
-                        onChange={(e) => setVisionWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
-                </div>
+                    <div className="General-game-info-inputs"><select 
+                            id="vision_winner" 
+                            name="vision-winner" 
+                            className='char-input'
+                            value={vision_winner}
+                            onChange={(e) => setVisionWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
+                    </div>
 
-                <div><select 
-                        id="creep_score_winner" 
-                        name="creep-score-winner" 
-                        className='char-input'
-                        value={creep_score_winner}
-                        onChange={(e) => setCreepScoreWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
-                </div>
+                    <div className="General-game-info-inputs"><select 
+                            id="creep_score_winner" 
+                            name="creep-score-winner" 
+                            className='char-input'
+                            value={creep_score_winner}
+                            onChange={(e) => setCreepScoreWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
+                    </div>
 
-                <div><select 
-                        id="wards_placed_winner" 
-                        name="wards-placed-winner" 
-                        className='char-input'
-                        value={wards_placed_winner}
-                        onChange={(e) => setWardsPlacedWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
-                </div>
+                    <div className="General-game-info-inputs"><select 
+                            id="wards_placed_winner" 
+                            name="wards-placed-winner" 
+                            className='char-input'
+                            value={wards_placed_winner}
+                            onChange={(e) => setWardsPlacedWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
+                    </div>
 
-                <div><select 
-                        id="champ_exp_winner" 
-                        name="champ-exp-winner" 
-                        className='char-input'
-                        value={champ_exp_winner}
-                        onChange={(e) => setChampExpWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
-                </div>
+                    <div className="General-game-info-inputs"><select 
+                            id="champ_exp_winner" 
+                            name="champ-exp-winner" 
+                            className='char-input'
+                            value={champ_exp_winner}
+                            onChange={(e) => setChampExpWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
+                    </div>
 
-                <div><select 
-                        id="gold_spent_winner" 
-                        name="gold-spent-winner" 
-                        className='char-input'
-                        value={gold_spent_winner}
-                        onChange={(e) => setGoldSpentWinner(e.target.value)}
-                        >
-                    <option value="n/a">N/A</option>
-                    <option value="0">Team 1</option>
-                    <option value="1">Team 2</option>
-                  </select>
+                    <div className="General-game-info-inputs"><select 
+                            id="gold_spent_winner" 
+                            name="gold-spent-winner" 
+                            className='char-input'
+                            value={gold_spent_winner}
+                            onChange={(e) => setGoldSpentWinner(e.target.value)}
+                            >
+                        <option value="n/a">N/A</option>
+                        <option value="0">Team 1</option>
+                        <option value="1">Team 2</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="Team">
+                <div>Predict the result of a match based on the inputs given on this page:</div>
+                <input type="submit" className="Predict-button" value="Predict"/>
+                <label id="prediction-result" className="Prediction-result"> {/* Prediction */} </label>
+                <hr></hr>
+                <div>Predict the result of a match based on a given .JSON file:</div>
+                <br></br>
+                <div>
+                  <label class="Upload-button">
+                    <input type="file" onChange={loadJSON} accept=".json"/>Upload .JSON
+                  </label>
+                  <label className="Uploaded-file-name">
+                    {fileName}
+                  </label>
+                  <br></br>
+                  <input type="button" value="Predict with JSON file" onClick={submitJSON} className="Predict-JSON-button"/>
+                  <label id="JSON-prediction-result" className="J-Prediction-result"> {/*Prediction*/} </label>
                 </div>
               </div>
             </div>
           </p>
-          <div id="prediction-result" className="Prediction-result"> {/* Prediction */} </div>
-          <input type="submit" className="Predict-button" value="Predict"/>
-        </p>
-      </div>
-
+        </div>
       </div>
     </form>
   );
